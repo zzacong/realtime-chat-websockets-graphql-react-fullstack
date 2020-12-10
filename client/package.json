@@ -29,8 +29,12 @@
     "webpack-dev-server": "3.11.0"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.4",
     "@babel/runtime": "^7.12.0",
+    "graphql": "^15.4.0",
     "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "react-dom": "^16.13.0",
+    "shards-react": "^1.0.3",
+    "subscriptions-transport-ws": "^0.9.18"
   }
 }
