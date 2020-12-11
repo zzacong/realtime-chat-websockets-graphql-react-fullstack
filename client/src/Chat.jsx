@@ -122,7 +122,9 @@ const Chat = () => {
           />
         </Col>
         <Col xs={2} style={{ padding: 0 }}>
-          <Button onClick={handleSend}>Send</Button>
+          <Button onClick={handleSend} style={{ width: '100%' }}>
+            Send
+          </Button>
         </Col>
       </Row>
     </Container>
