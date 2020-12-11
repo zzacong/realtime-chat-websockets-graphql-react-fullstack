@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "realtime-chat-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,9 @@
     "dev": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Zac Ong"
+  },
   "license": "ISC",
   "dependencies": {
     "graphql-yoga": "^1.18.3"
