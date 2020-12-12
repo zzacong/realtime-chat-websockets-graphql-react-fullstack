@@ -12,7 +12,7 @@ import { WebSocketLink } from '@apollo/client/link/ws'
 import { Container, Row, Col, FormInput, Button } from 'shards-react'
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/`,
+  uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
   },
@@ -35,7 +35,9 @@ const GET_MESSAGES = gql`
 
 const POST_MESSAGE = gql`
   mutation($user: String!, $content: String!) {
-    postMessage(user: $user, content: $content)
+    postMessage(user: $user, content: $content) {
+      id
+    }
   }
 `
 

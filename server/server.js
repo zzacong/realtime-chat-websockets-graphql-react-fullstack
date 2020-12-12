@@ -1,8 +1,12 @@
-const { GraphQLServer, PubSub } = require('graphql-yoga')
+const { ApolloServer, PubSub, gql } = require('apollo-server')
+
+const pubsub = new PubSub()
 
 const messages = []
+const subscribers = []
+const onMessagesUpdate = fn => subscribers.push(fn)
 
-const typeDefs = `
+const typeDefs = gql`
   type Message {
     id: ID!
     user: String!
@@ -14,7 +18,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    postMessage(user: String!, content: String!): ID!
+    postMessage(user: String!, content: String!): Message!
   }
 
   type Subscription {
@@ -22,28 +26,26 @@ const typeDefs = `
   }
 `
 
-const subscribers = []
-const onMessagesUpdate = fn => subscribers.push(fn)
-
 const resolvers = {
   Query: {
     messages: () => messages,
   },
   Mutation: {
-    postMessage: (parent, { user, content }) => {
+    postMessage: (parent, args) => {
       const id = messages.length
-      messages.push({
+      const msg = {
         id,
-        user,
-        content,
-      })
+        user: args.user,
+        content: args.content,
+      }
+      messages.push(msg)
       subscribers.forEach(fn => fn())
-      return id
+      return msg
     },
   },
   Subscription: {
     messages: {
-      subscribe: (parent, args, { pubsub }) => {
+      subscribe: () => {
         const channel = Math.random().toString(36).slice(2, 15)
         onMessagesUpdate(() => pubsub.publish(channel, { messages }))
         setTimeout(() => pubsub.publish(channel, { messages }), 0)
@@ -53,8 +55,8 @@ const resolvers = {
   },
 }
 
-const pubsub = new PubSub()
-const server = new GraphQLServer({ typeDefs, resolvers, context: { pubsub } })
-server.start(({ port }) => {
-  console.log(`Server started on http://localhost:${port}`)
+const server = new ApolloServer({ typeDefs, resolvers })
+const PORT = process.env.PORT || 4000
+server.listen(PORT).then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`)
 })
