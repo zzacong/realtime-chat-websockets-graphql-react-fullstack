@@ -31,7 +31,7 @@ const resolvers = {
     messages: () => messages,
   },
   Mutation: {
-    postMessage: (parent, args) => {
+    postMessage: (_parent, args) => {
       const id = messages.length
       const msg = {
         id,
